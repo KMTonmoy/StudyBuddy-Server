@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
 require('dotenv').config()
-const port = process.env.PORT || 9000
+const port = process.env.PORT || 5000
 const app = express()
 
 const corsOptions = {
@@ -19,7 +19,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
- 
+
 const verifyToken = (req, res, next) => {
     const token = req.cookies?.token
     if (!token) return res.status(401).send({ message: 'unauthorized access' })
@@ -51,6 +51,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
+        const assignmentCollection = client.db('GroupGrid').collection('assignments')
 
         // await client.connect();
         // Send a ping to confirm a successful connection
@@ -60,19 +61,38 @@ async function run() {
 
 
         // jwt generate
-        app.post('/jwt', async (req, res) => {
-            const email = req.body
-            const token = jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: '365d',
-            }).
-                res
-                .cookie('token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-                })
-                .send({ success: true })
+        // app.post('/jwt', async (req, res) => {
+        //     const email = req.body
+        //     const token = jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, {
+        //         expiresIn: '365d',
+        //     }).
+        //         res
+        //         .cookie('token', token, {
+        //             httpOnly: true,
+        //             secure: process.env.NODE_ENV === 'production',
+        //             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        //         })
+        //         .send({ success: true })
+        // })
+
+        app.get('/assignemt', async (req, res) => {
+            const result = await assignmentCollection.find().toArray()
+            res.send(result)
         })
+
+        app.post('/assignemt', async (req, res) => {
+            const assignmentData = req.body
+            const result = await assignmentCollection.insertOne(assignmentData)
+            res.send(result)
+        })
+        app.get('/assignemt/:id', async (req, res) => {
+            const id = req.params.id 
+            const query = { _id: new ObjectId(id) }
+            const result = await assignmentCollection.findOne(query)
+            res.send(result)
+        }) 
+
+ 
 
         // Clear token on logout
         app.get('/logout', (req, res) => {
