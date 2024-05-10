@@ -49,7 +49,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
         const assignmentCollection = client.db('GroupGrid').collection('assignments');
 
         app.get('/assignment', async (req, res) => {
@@ -81,7 +81,7 @@ async function run() {
                 if (!result) {
                     return res.status(404).send({ message: 'assignment not found' });
                 }
-                res.send(result);
+                res.send(result); 
             } catch (error) {
                 console.error('Error fetching assignment:', error);
                 res.status(500).send({ message: 'Internal Server Error' });
