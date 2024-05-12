@@ -163,7 +163,7 @@ async function run() {
                 $set: {
                     title: updateAssignment.title,
                     thumbnailURL: updateAssignment.thumbnailURL,
-                    mark: updateAssignment.mark,
+                    marks: updateAssignment.marks,
                     difficultyLevel: updateAssignment.difficultyLevel,
                     description: updateAssignment.description,
                     dueDate: updateAssignment.dueDate,
