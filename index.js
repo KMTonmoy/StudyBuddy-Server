@@ -90,7 +90,7 @@ async function run() {
                 $set: {
                     result: updateMark.result,
                     feedback: updateMark.feedback,
-                    status: "Compleate"
+                    status: updateMark.status,
                 }
             }
             const result = await TakeAssignmnetCollection.updateOne(filter, Mark, options);
