@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors({
-    origin: 'https://assignment-11-75185.web.app',
+    origin: 'https://studybuddy20.netlify.app/',
     credentials: true
 }));
 app.use(express.json());
